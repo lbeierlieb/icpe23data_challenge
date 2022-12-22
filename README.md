@@ -13,3 +13,8 @@ The resulting timeseries are also saved as JSON files - per file 10 runs with
 The goal of the data challenge paper is to compare different implementations
 of this processing step. We measure the execution times required by different
 programming languages using different parsing libraries and strategies.
+
+Measured results on Lukas laptop to get an impression:
+| Impl.    | Result                                      |
+|----------|---------------------------------------------|
+| Python   | 967.25s user, 78.42s system, 17:36.00 total |
