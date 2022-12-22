@@ -6,13 +6,11 @@ from functools import reduce
 def processFile(rawFilepath, destinationFilepath):
     #TODO adjust scaling - currently we show us, but actual file is in ms
     with open(rawFilepath, "r") as input, open(destinationFilepath, "w") as output:
-        content = input.read()
-        inJson = json.loads(content)
+        inJson = json.load(input)
         rawData = inJson[0]["primaryMetric"]["rawDataHistogram"]
-        processed = list(map(lambda run: list(map(lambda batch: mean(reduce(list.__add__, list(map(lambda x: [x[0]]*x[1], batch)))), run)), rawData))
-        outJson = json.dumps(processed)
-        output.write(outJson)
-        output.flush()
+        processed = list(map(lambda run: list(map(lambda batch: mean(
+            reduce(list.__add__, list(map(lambda x: [x[0]]*x[1], batch)))), run)), rawData))
+        json.dumps(processed)
 
 
 def main():
