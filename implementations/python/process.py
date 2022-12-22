@@ -31,7 +31,7 @@ def processFile(rawFilepath, destinationFilepath):
         scaler = getScaler(metric)
         processed = [[scaler(aggregateBatch(batch)) for batch in run]
                      for run in rawData]
-        json.dump(processed, output)
+        json.dump(processed, output, separators=(',', ':'))
 
 
 def testSingleFile():
