@@ -38,14 +38,30 @@ process_file <- function(raw_filepath, destination_filepath) {
     write(out_json, destination_filepath)
 }
 
-raw_path <- "jmh/"
-dest_path <- "/tmp/jmh/"
-dir.create(dest_path, showWarnings = FALSE, recursive = TRUE)
+testSingleFile <- function() {
+    raw_path <- "jmh/"
+    dest_path <- "/tmp/jmh/"
+    dir.create(dest_path, showWarnings = FALSE, recursive = TRUE)
 
-# filename <- "apache__arrow#org.apache.arrow.adapter.jdbc.JdbcAdapterBenchmarks.consumeBenchmark#.json" # 21 MBpy
-# filename <- "apache__logging-log4j2#org.apache.logging.log4j.perf.jmh.AsyncAppenderLog4j1Benchmark.throughput11Params#.json"  # 1.9GB
- filename <- "apache__logging-log4j2#org.apache.logging.log4j.perf.jmh.AsyncLoggersBenchmark.throughput9Params#.json" # 698 MB
-# filename <- "RoaringBitmap__RoaringBitmap#org.roaringbitmap.aggregation.andnot.worstcase.Roaring64BitmapBenchmark.inplace_andNot#.json"  # 24 MB
-# filename <- "JCTools__JCTools#org.jctools.jmh.baseline.SingleThreadedPoll.poll#qType=MpscArrayQueue.json" # 9 MB
+    # filename <- "apache__arrow#org.apache.arrow.adapter.jdbc.JdbcAdapterBenchmarks.consumeBenchmark#.json" # 21 MBpy
+    # filename <- "apache__logging-log4j2#org.apache.logging.log4j.perf.jmh.AsyncAppenderLog4j1Benchmark.throughput11Params#.json"  # 1.9GB
+    filename <- "apache__logging-log4j2#org.apache.logging.log4j.perf.jmh.AsyncLoggersBenchmark.throughput9Params#.json" # 698 MB
+    # filename <- "RoaringBitmap__RoaringBitmap#org.roaringbitmap.aggregation.andnot.worstcase.Roaring64BitmapBenchmark.inplace_andNot#.json"  # 24 MB
+    # filename <- "JCTools__JCTools#org.jctools.jmh.baseline.SingleThreadedPoll.poll#qType=MpscArrayQueue.json" # 9 MB
 
-process_file(paste(raw_path, filename, sep = ""), paste(dest_path, filename, sep = ""))
+    process_file(paste(raw_path, filename, sep = ""), paste(dest_path, filename, sep = ""))
+}
+
+processAllFiles <- function() {
+    raw_path <- "jmh/"
+    dest_path <- "/tmp/jmh/"
+    dir.create(dest_path, showWarnings = FALSE, recursive = TRUE)
+
+    for (filename in list.files(raw_path)) {
+        print(filename)
+        process_file(paste(raw_path, filename, sep = ""), paste(dest_path, filename, sep = ""))
+    }
+}
+
+testSingleFile()
+# processAllFiles()
