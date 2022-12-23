@@ -1,3 +1,5 @@
 /icpe-data-challenge-jmh/
 /jmh/
 /jmh.tar.gz
+/implementations/rust_sarde/Cargo.lock
+/implementations/rust_sarde/target/
