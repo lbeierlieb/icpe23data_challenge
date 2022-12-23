@@ -15,6 +15,7 @@ of this processing step. We measure the execution times required by different
 programming languages using different parsing libraries and strategies.
 
 Measured results on Lukas laptop to get an impression:
-| Impl.    | Result                                      |
-|----------|---------------------------------------------|
-| Python   | 967.25s user, 78.42s system, 17:36.00 total |
+| Impl.    | Result                                                |
+|----------|-------------------------------------------------------|
+| Python   | 967.25s user, 78.42s system, 17:36.00 total           |
+| R rjson  | 10679.68s user 36.22s system 98% cpu 3:00:56.25 total |
