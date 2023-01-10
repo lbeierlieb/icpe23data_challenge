@@ -18,5 +18,6 @@ Measured results on Lukas laptop to get an impression:
 | Impl.      | Time        | Result                                                |
 |------------|-------------|--------------------------------------|
 | Python     | 00:17:36.00 | 967.25s user, 78.42s system          |
+| Python 3.11| 00:18:16.25 | 1007.35s user 77.83s system          |
 | R rjson    | 03:00:56.25 | 10679.68s user 36.22s system         |
 | Rust serde | 00:04:44.21 | 247.45s user 23.61s system           |
