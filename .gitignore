@@ -3,3 +3,5 @@
 /jmh.tar.gz
 /implementations/rust_sarde/Cargo.lock
 /implementations/rust_sarde/target/
+/implementations/rust_nom/Cargo.lock
+/implementations/rust_nom/target/
