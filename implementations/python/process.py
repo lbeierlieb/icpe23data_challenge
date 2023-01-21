@@ -9,18 +9,17 @@ def aggregateBatch(list):
     return sum/count
 
 
-def getScaler(metric):
+def getScale(metric):
     if metric.startswith("s"):
-        scale = 1
+        return 1
     elif metric.startswith("ms"):
-        scale = 1e-3
+        return 1e-3
     elif metric.startswith("us"):
-        scale = 1e-6
+        return 1e-6
     elif metric.startswith("ns"):
-        scale = 1e-9
+        return 1e-9
     else:
         raise ValueError("unhandled metric encountered!")
-    return lambda val: scale*val
 
 
 def processFile(rawFilepath, destinationFilepath):
@@ -28,29 +27,15 @@ def processFile(rawFilepath, destinationFilepath):
         inJson = json.load(input)
         rawData = inJson[0]["primaryMetric"]["rawDataHistogram"]
         metric = inJson[0]["primaryMetric"]["scoreUnit"]
-        scaler = getScaler(metric)
-        processed = [[scaler(aggregateBatch(batch)) for batch in run]
+        scale = getScale(metric)
+        processed = [[scale*aggregateBatch(batch) for batch in run]
                      for run in rawData]
         json.dump(processed, output, separators=(',', ':'))
 
 
-def testSingleFile():
-    rawPath = "jmh/"
-    destPath = "/tmp/jmh/"
-    os.makedirs(destPath, exist_ok=True)
-
-    # filename = "apache__arrow#org.apache.arrow.adapter.jdbc.JdbcAdapterBenchmarks.consumeBenchmark#.json" # 21 MB
-    # filename = "apache__logging-log4j2#org.apache.logging.log4j.perf.jmh.AsyncAppenderLog4j1Benchmark.throughput11Params#.json"  # 1.9GB
-    filename = "apache__logging-log4j2#org.apache.logging.log4j.perf.jmh.AsyncLoggersBenchmark.throughput9Params#.json"  # 698 MB
-    # filename = "RoaringBitmap__RoaringBitmap#org.roaringbitmap.aggregation.andnot.worstcase.Roaring64BitmapBenchmark.inplace_andNot#.json"  # 24 MB
-
-    processFile(rawPath + filename, destPath + filename)
-
-
 def processAllFiles():
-    rawPath = "jmh/"
-    destPath = "/tmp/jmh/"
-    os.makedirs(destPath, exist_ok=True)
+    rawPath = "/raw/"
+    destPath = "/processed/"
 
     for file in os.listdir(rawPath):
         print(file)
@@ -58,8 +43,7 @@ def processAllFiles():
 
 
 def main():
-    testSingleFile()
-    # processAllFiles()
+    processAllFiles()
 
 
 if __name__ == "__main__":
