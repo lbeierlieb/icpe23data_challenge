@@ -1,4 +1,4 @@
-# ICPEDataChallenge2023_Lukas
+# ICPEDataChallenge2023
 
 [Link to Website](https://icpe2023.spec.org/tracks-and-submissions/data-challenge-track/)
 
@@ -33,6 +33,11 @@ This is not necessary for data processing, but can be used together with the Pyt
 - run `./build <buildname>` to build the container image <buildname>
 - run `./build_all` to build all images within `builds`
 - Make sure you build the image for a buildname before you try to run them
+- The `run` bash script is used to execute built images and measure container execution time.
+By default, the script mounts `/tmp/processed/` to the container, which will then store its processed files there.
+By default, the script limits containers to a maximum RAM usage of 26GB.
+You can change the destination path and the container memory limit at the top of the `run` script.
+If you assign less then 26GB of memory, the parallelized rust_serde_rayon builds might reach the limit and terminate the container early.
 - run `./run --bench <buildname>` to let <buildname> process all the files in `jmh_bench`.
 The execution time together with <buildname> is stored in `bench_log.csv`. Run `./init_bench_log` to clear the log and provide a CSV header line.
 - run `./run --all <buildname>` to let <buildname> process all the 586 files in `jmh`.
