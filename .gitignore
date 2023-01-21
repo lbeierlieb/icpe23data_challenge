@@ -3,6 +3,7 @@
 /icpe-data-challenge-jmh/
 /implementations/rust_nom/target/
 /implementations/rust_serde/target/
+/implementations/rust_serde_rayon/target/
 /jmh/
 /jmh_bench
 /jmh.tar.gz
