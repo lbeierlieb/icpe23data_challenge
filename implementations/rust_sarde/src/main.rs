@@ -1,16 +1,13 @@
-extern crate serde;
-extern crate serde_json;
-
 use serde_json::Value as JsonValue;
 use std::fs;
 
-fn get_scale(metric : &str) -> f64 {
+fn get_scale(metric: &str) -> f64 {
     match metric.chars().next().unwrap() {
         's' => 1.0,
         'm' => 1e-3,
         'u' => 1e-6,
         'n' => 1e-9,
-        _   => panic!("unknown metric")
+        _ => panic!("unknown metric"),
     }
 }
 
@@ -22,7 +19,7 @@ fn aggregate_batch(batch: &Vec<JsonValue>) -> f64 {
         let unwrapped = measurement.as_array().unwrap();
         let time = unwrapped[0].as_f64().unwrap();
         let ops = unwrapped[1].as_f64().unwrap();
-        sum += time*ops;
+        sum += time * ops;
         count += ops;
     }
 
@@ -32,8 +29,10 @@ fn aggregate_batch(batch: &Vec<JsonValue>) -> f64 {
 fn process_file(raw_filepath: &str, destination_filepath: &str) {
     let input = fs::read_to_string(raw_filepath).unwrap();
 
-    let in_json : JsonValue = serde_json::from_str(&input).expect("should be fine");
-    let raw_data = in_json[0]["primaryMetric"]["rawDataHistogram"].as_array().unwrap();
+    let in_json: JsonValue = serde_json::from_str(&input).expect("should be fine");
+    let raw_data = in_json[0]["primaryMetric"]["rawDataHistogram"]
+        .as_array()
+        .unwrap();
     let metric = in_json[0]["primaryMetric"]["scoreUnit"].as_str().unwrap();
     let scale = get_scale(metric);
 
@@ -50,23 +49,9 @@ fn process_file(raw_filepath: &str, destination_filepath: &str) {
     fs::write(destination_filepath, &output).unwrap();
 }
 
-fn test_single_file() {
-    let mut raw_path = "../../jmh/".to_string();
-    let mut dest_path = "/tmp/jmh/".to_string();
-    fs::create_dir_all(&dest_path).unwrap();
-    let filename = "apache__logging-log4j2#org.apache.logging.log4j.perf.jmh.AsyncLoggersBenchmark.throughput9Params#.json";
-
-    raw_path.push_str(filename);
-    dest_path.push_str(filename);
-
-    println!("{}", raw_path);
-    process_file(&raw_path, &dest_path);
-}
-
 fn process_all_files() {
-    let raw_path = "../../jmh/";
-    let dest_path = "/tmp/jmh/";
-    fs::create_dir_all(&dest_path).unwrap();
+    let raw_path = "/raw/";
+    let dest_path = "/processed/";
 
     for dir_entry in fs::read_dir(raw_path).unwrap() {
         let path = dir_entry.unwrap().file_name();
@@ -81,10 +66,5 @@ fn process_all_files() {
 }
 
 fn main() {
-    let all = true;
-    if all {
-        process_all_files();
-    } else {
-        test_single_file();
-    }
+    process_all_files();
 }
