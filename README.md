@@ -43,4 +43,8 @@ If you assign less then 26GB of memory, the parallelized rust_serde_rayon builds
 The execution time together with <buildname> is stored in `bench_log.csv`. Run `./init_bench_log` to clear the log and provide a CSV header line.
 - run `./run --all <buildname>` to let buildname process all the 586 files in `jmh`.
 The execution time together with the buildname is stored in `all_log.csv`. Run `./init_all_log` to clear the log and provide a CSV header line.
+- run `./bench` to first clear `bench_log.csv`, then run `execute run --bench` for every buildname 10 times, then rename `bench_log.csv` to `bench_result_<TIMESTAMP>.csv`, and create a new empty `bench_log.csv`.
+This will probably take longer than one hour.
+- run `./time_whole_dataset` to first clear `all_log.csv`, then run `execute run --all` for every buildname once, then rename `all_log.csv` to `dataset_measurement_<TIMESTAMP>.csv`, and create a new empty `all_log.csv`.
+This will probably take multiple hours.
 - `icpe23dc_measurements/` contains the datasets presented in the ICPE23 data challenge paper.
