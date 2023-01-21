@@ -13,3 +13,10 @@ for FILE in $(cat invalid_raw_files)
 do
     rm --verbose "jmh/"$FILE
 done
+
+echo "Copying files used for benchmark runs to separate folder"
+mkdir --verbose "jmh_bench"
+for FILE in $(cat benchfiles)
+do
+    cp --verbose "jmh/"$FILE "jmh_bench"
+done
