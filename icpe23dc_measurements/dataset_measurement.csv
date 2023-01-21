@@ -1,0 +1,14 @@
+buildname,executiontime_ms
+pypy3_7,715140
+pypy3_8,673173
+pypy3_9,632918
+python3_10,1022743
+python3_11,960719
+python3_7,1135791
+python3_8,1150604
+python3_9,1194832
+r_rjson,10856252
+rust_serde,270780
+rust_serde_rayon_2thread,168646
+rust_serde_rayon_3thread,124942
+rust_serde_rayon_4thread,105590
