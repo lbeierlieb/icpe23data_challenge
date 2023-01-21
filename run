@@ -1,0 +1,58 @@
+#!/bin/bash
+
+MEMORY_AVAILABLE=26G
+DEST_FOLDER=/tmp/processed
+
+function print_buildnames {
+    echo "Valid buildnames are:"
+    for FILE in $(ls builds)
+    do
+        echo $FILE
+    done
+}
+
+function print_usage {
+    echo "Usage: '$0 --bench <buildname>' or '$0 --all <buildname>'"
+    echo "Make sure the container is built before running it"
+    print_buildnames
+}
+
+if [[ $# -ne 2 ]]; then
+    print_usage
+    exit 1
+fi
+
+if [[ $1 == "--bench" ]]; then
+    RAW_FILES_PATH="jmh_bench"
+    LOG_FILE_PATH="bench_log.csv"
+elif [[ $1 == "--all" ]]; then
+    RAW_FILES_PATH="jmh"
+    LOG_FILE_PATH="all_log.csv"
+else
+    print_usage
+    exit 3
+fi
+
+if [[ ! -d "builds/$2" ]]; then
+    echo "'$2' is not a valid buildname"
+    print_buildnames
+    exit 2
+fi
+
+echo "Running build '"$2"' with files in folder '"$RAW_FILES_PATH"'"
+
+docker run --name dc23container --memory $MEMORY_AVAILABLE --memory-swap $MEMORY_AVAILABLE -v $(pwd)/$RAW_FILES_PATH:/raw -v $DEST_FOLDER:/processed "icpe23dc_"$2
+
+START=$(docker inspect --format='{{.State.StartedAt}}' dc23container)
+STOP=$(docker inspect --format='{{.State.FinishedAt}}' dc23container)
+
+docker rm dc23container
+
+START_TIMESTAMP=$(date --date=$START +%s%3N)
+STOP_TIMESTAMP=$(date --date=$STOP +%s%3N)
+EXECTIME=$(($STOP_TIMESTAMP-$START_TIMESTAMP))
+
+echo $2","$EXECTIME >> $LOG_FILE_PATH
+
+echo "Execution took "$EXECTIME"ms"
+echo "Result written to "$LOG_FILE_PATH

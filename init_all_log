@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "buildname,executiontime_ms" > all_log.csv

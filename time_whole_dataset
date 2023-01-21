@@ -1,0 +1,14 @@
+#!/bin/bash
+
+./init_all_log
+echo "Measuring execution time for complete dataset for each build"
+for BUILDNAME in $(ls builds)
+do
+    ./run --all $BUILDNAME
+done
+
+SAVE_FILE="dataset_measurement_"$(date +%s)".csv"
+mv all_log.csv $SAVE_FILE
+echo "Measured execution times saved in '"$SAVE_FILE"'"
+
+./init_all_log

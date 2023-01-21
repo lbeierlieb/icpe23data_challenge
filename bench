@@ -1,0 +1,20 @@
+#!/bin/bash
+
+NUM_ITERATIONS=10
+
+./init_bench_log
+echo "Starting benchmark run with "$NUM_ITERATIONS" iterations"
+for i in `seq 1 $NUM_ITERATIONS`
+do 
+    echo "Starting iteration "$i"/"$NUM_ITERATIONS
+    for BUILDNAME in $(ls builds)
+    do
+        ./run --bench $BUILDNAME
+    done
+done
+
+SAVE_FILE="bench_result_"$(date +%s)".csv"
+mv bench_log.csv $SAVE_FILE
+echo "Measured execution times saved in '"$SAVE_FILE"'"
+
+./init_bench_log
