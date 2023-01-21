@@ -2,7 +2,7 @@
 /bench_log.csv
 /icpe-data-challenge-jmh/
 /implementations/rust_nom/target/
-/implementations/rust_sarde/target/
+/implementations/rust_serde/target/
 /jmh/
 /jmh_bench
 /jmh.tar.gz
