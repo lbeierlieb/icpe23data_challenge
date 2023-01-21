@@ -10,7 +10,7 @@ aggregate_batch <- function(batch) {
     sum_and_count[1] / sum_and_count[2]
 }
 
-get_scaler <- function(metric) {
+get_scale <- function(metric) {
     if (startsWith(metric, "s")) {
         scale <- 1
     } else if (startsWith(metric, "ms")) {
@@ -23,38 +23,22 @@ get_scaler <- function(metric) {
         stop("unhandled metric encountered")
     }
 
-    function(val) {
-        val * scale
-    }
+    scale
 }
 
 process_file <- function(raw_filepath, destination_filepath) {
     in_json <- fromJSON(file = raw_filepath)
     raw_data <- in_json[[1]]$primaryMetric$rawDataHistogram
     metric <- in_json[[1]]$primaryMetric$scoreUnit
-    scaler <- get_scaler(metric)
-    processed <- lapply(raw_data, function(run) lapply(run, function(batch) scaler(aggregate_batch(batch))))
+    scale <- get_scale(metric)
+    processed <- lapply(raw_data, function(run) lapply(run, function(batch) scale*aggregate_batch(batch)))
     out_json <- toJSON(processed)
     write(out_json, destination_filepath)
 }
 
-testSingleFile <- function() {
-    raw_path <- "jmh/"
-    dest_path <- "/tmp/jmh/"
-    dir.create(dest_path, showWarnings = FALSE, recursive = TRUE)
-
-    # filename <- "apache__arrow#org.apache.arrow.adapter.jdbc.JdbcAdapterBenchmarks.consumeBenchmark#.json" # 21 MBpy
-    # filename <- "apache__logging-log4j2#org.apache.logging.log4j.perf.jmh.AsyncAppenderLog4j1Benchmark.throughput11Params#.json"  # 1.9GB
-    filename <- "apache__logging-log4j2#org.apache.logging.log4j.perf.jmh.AsyncLoggersBenchmark.throughput9Params#.json" # 698 MB
-    # filename <- "RoaringBitmap__RoaringBitmap#org.roaringbitmap.aggregation.andnot.worstcase.Roaring64BitmapBenchmark.inplace_andNot#.json"  # 24 MB
-    # filename <- "JCTools__JCTools#org.jctools.jmh.baseline.SingleThreadedPoll.poll#qType=MpscArrayQueue.json" # 9 MB
-
-    process_file(paste(raw_path, filename, sep = ""), paste(dest_path, filename, sep = ""))
-}
-
 processAllFiles <- function() {
-    raw_path <- "jmh/"
-    dest_path <- "/tmp/jmh/"
+    raw_path <- "/raw/"
+    dest_path <- "/processed/"
     dir.create(dest_path, showWarnings = FALSE, recursive = TRUE)
 
     for (filename in list.files(raw_path)) {
@@ -63,5 +47,4 @@ processAllFiles <- function() {
     }
 }
 
-testSingleFile()
-# processAllFiles()
+processAllFiles()
