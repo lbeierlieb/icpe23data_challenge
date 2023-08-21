@@ -1,0 +1,6 @@
+buildname,mean,max,min
+Rust,8965.6,556.4,316.6
+RustImproved,6758.8,262.8,364.2
+
+for comparison Rust from ICPE measurement
+Rust,8396.3,273.7,344.3
